@@ -1,6 +1,6 @@
 const storeID = "2622294";
 const corsProxy = "https://crossorigin.me/";
-const baseUrl = `http://weeklyad.publix.com/Publix/BrowseByListing/ByCategory/?StoreID=${storeID}&CategoryID=5117860`;
+const baseUrl = `http://weeklyad.publix.com/Publix/BrowseByListing/BySearch/?StoreID=${storeID}&SearchText=whole+sub`;
 const url = `${corsProxy}${baseUrl}`;
 
 nextBlankday = dayOfWeek => {
@@ -20,17 +20,17 @@ const handleErrors = response => {
 };
 
 const scrapeData = html => {
-  const sub = Array.from(html.documentElement.querySelectorAll("span.desktopBBDTabletTitle")).filter(
-    title => title.innerHTML.includes("Sub")
-  )[0];
+  const sub = Array.from(
+    html.documentElement.querySelectorAll("span.desktopBBDTabletTitle")
+  ).filter(title => title.innerHTML.includes("Sub"))[0];
   const name = sub.innerText.trim();
   const price = sub.parentNode.nextElementSibling.innerText.trim();
   const nextThursday = new Date(nextBlankday(4)).getTime();
   const pubsub = { name: name, price: price, expires: nextThursday };
   return pubsub;
-}
+};
 
-const getPubsub = async (url) => {
+const getPubsub = async url => {
   try {
     const response = handleErrors(await fetch(url));
     const text = await response.text();
@@ -60,4 +60,3 @@ if (
     localStorage.setItem("pubsub", JSON.stringify(pubsub));
   });
 }
-
