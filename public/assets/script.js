@@ -44,8 +44,19 @@ const getPubsub = async url => {
 };
 
 const displayResults = pubsub => {
-  document.getElementById("name").textContent = pubsub.name;
-  document.getElementById("price").textContent = "$" + pubsub.price;
+  if (pubsub.name) {
+    if (pubsub.price) {
+      document.getElementById("name").textContent = pubsub.name;
+      document.getElementById("price").textContent = "$" + pubsub.price;
+    } else {
+      document.getElementById("error").textContent =
+        "Bummer! There's no sub on sale, but here's a coupon ¯\\_(ツ)_/¯";
+      document.getElementById("name").textContent = pubsub.name;
+    }
+  } else {
+    document.getElementById("error").textContent =
+      "Hmm... can't seem to find anything. Sorry about that!";
+  }
 };
 
 if (
