@@ -22,7 +22,7 @@ const handleErrors = response => {
 const scrapeData = html => {
   const sub = Array.from(
     html.documentElement.querySelectorAll("span.desktopBBDTabletTitle")
-  ).filter(title => title.innerHTML.includes("Sub"))[0];
+  ).filter(title => title.innerHTML.toLowerCase().includes("sub"))[0];
   const name = sub.innerText.trim();
   const price = sub.parentNode.nextElementSibling.innerText.trim();
   const nextThursday = new Date(nextBlankday(4)).getTime();
