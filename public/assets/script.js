@@ -19,7 +19,7 @@ const getPubsub = async () => {
     const response = await fetch("/.netlify/functions/pubsub");
     const resObj = await response.json();
     console.log(resObj);
-    return resObj;
+    return resObj.body;
   } catch (err) {
     console.log("Error!");
   }
