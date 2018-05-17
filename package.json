@@ -1,0 +1,22 @@
+{
+  "name": "pubsub-client-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taylorjwalker/pubsub-client-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taylorjwalker/pubsub-client-scraper/issues"
+  },
+  "homepage": "https://github.com/taylorjwalker/pubsub-client-scraper#readme",
+  "dependencies": {
+    "netlify-lambda": "^0.4.0"
+  }
+}
