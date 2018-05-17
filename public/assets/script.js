@@ -18,7 +18,6 @@ const getPubsub = async () => {
   try {
     const response = await fetch("/.netlify/functions/pubsub");
     const resObj = await response.json();
-    console.log(resObj);
     return resObj.body;
   } catch (err) {
     console.log("Error!");
@@ -33,7 +32,6 @@ if (
   displayResults(pubsub);
 } else {
   getPubsub().then(pubsub => {
-    console.log(pubsub);
     displayResults(pubsub);
     localStorage.setItem("pubsub", JSON.stringify(pubsub));
   });
