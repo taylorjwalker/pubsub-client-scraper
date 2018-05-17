@@ -1,3 +1,6 @@
+const axios = require("axios");
+const cheerio = require("cheerio");
+
 exports.handler = function(event, context, callback) {
   const storeID = "2622294";
   const corsProxy = "https://crossorigin.me/";
@@ -15,33 +18,47 @@ exports.handler = function(event, context, callback) {
     return result;
   };
 
-  const handleErrors = response => {
-    if (!response.ok) throw Error(response.statusText);
-    return response;
-  };
+  // const handleErrors = response => {
+  //   if (!response.ok) throw Error(response.statusText);
+  //   return response;
+  // };
 
-  const scrapeData = html => {
-    const sub = Array.from(
-      html.documentElement.querySelectorAll("span.desktopBBDTabletTitle")
-    ).filter(title => title.innerHTML.toLowerCase().includes("sub"))[0];
-    const name = sub.innerText.trim();
-    const price = sub.parentNode.nextElementSibling.innerText.trim();
-    const nextThursday = new Date(`nextBlankday`(4)).getTime();
-    const pubsub = { name: name, price: price, expires: nextThursday };
-    return pubsub;
-  };
+  // const scrapeData = html => {
+  //   const sub = Array.from(
+  //     html.documentElement.querySelectorAll("span.desktopBBDTabletTitle")
+  //   ).filter(title => title.innerHTML.toLowerCase().includes("sub"))[0];
+  //   const name = sub.innerText.trim();
+  //   const price = sub.parentNode.nextElementSibling.innerText.trim();
+  //   const nextThursday = new Date(`nextBlankday`(4)).getTime();
+  //   const pubsub = { name: name, price: price, expires: nextThursday };
+  //   return pubsub;
+  // };
 
   const getPubsub = async url => {
-    try {
-      const response = handleErrors(await fetch(url));
-      const text = await response.text();
-      const parser = new DOMParser();
-      const htmlDocument = parser.parseFromString(text, "text/html");
-      return scrapeData(htmlDocument);
-    } catch (err) {
-      console.error("Oh nooooo!");
-      console.error(err);
-    }
+    axios.get(url).then(
+      response => {
+        if (response.status === 200) {
+          const html = response.data;
+          const $ = cheerio.load(html);
+          const sub = $("span.desktopBBDTabletTitle").filter((i, el) =>
+            $(this)
+              .text()
+              .toLowerCase()
+              .includes("sub")
+          )[0];
+          const name = sub.text().trim();
+          const price = sub
+            .parent()
+            .next()
+            .text()
+            .trim();
+          const nextThursday = new Date(`nextBlankday`(4)).getTime();
+          const pubsub = { name: name, price: price, expires: nextThursday };
+          return pubsub;
+        }
+      },
+      error => console.log(err)
+    );
   };
 
   callback(null, {
